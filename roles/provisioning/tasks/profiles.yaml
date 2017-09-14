@@ -1,0 +1,104 @@
+---
+#- debug:
+#    var: server_facts
+#    verbosity: 2
+#- set_fact:
+#      model: "{{ server_facts.model }}"
+#      short_model: "{{ server_facts.shortModel }}"
+#      dl_model: "{{ server_facts.shortModel.split(' ').0 }}"
+#  tags:
+#  - model
+#- debug: 
+#    var: model
+#    verbosity: 2
+#  tags:
+#  - model
+#- debug:
+#    var: short_model
+#    verbosity: 2
+#  tags:
+#  - model
+#- debug:
+#    var: dl_model
+#    verbosity: 2
+#  tags:
+#  - model
+
+- name: create a service profile and assign it to a node
+  oneview_server_profile:
+    state: present
+    data:
+      serverProfileTemplateName: "{{ server_profile_template }}"
+      name: "{{ inventory_hostname.split('.').0 }}"
+      affinity: "Bay"
+      description: "{{ inventory_hostname.split('.').0 }} with {{ server_profile_template }}"
+      enclosureBay: "{{ enclosure_bay }}"
+      osDeploymentSettings:
+        osDeploymentPlanUri: "{{ os_deployment_plan_uri }}"
+        osCustomAttributes:
+        - 
+          name: "ServerFQDN"
+          value: "{{ inventory_hostname }}"
+        - 
+          name: "Team0NIC1.ipaddress"
+          value: "{{ ansible_host }}"
+        - 
+          name: "Team0NIC1.ipv4disable"
+          value: "false"
+        - 
+          name: "Team0NIC1.constraint"
+          value: "userspecified"
+        - 
+          name: "Team0NIC1.connectionid"
+          value: "2"
+        - 
+          name: "Team0NIC1.gateway"
+          value: "10.10.173.44"
+        - 
+          name: "Team0NIC1.netmask"
+          value: "255.255.252.0"
+        - 
+          name: "Team0NIC1.dhcp"
+          value: "false"
+        - 
+          name: "Team0NIC1.dns1"
+          value: "10.10.173.45"
+        - 
+          name: "Team0NIC1.dns2"
+          value: "10.10.173.1"
+        - 
+          name: "Team0NIC1.domain"
+          value: "am2.cloudra.local"
+        - 
+          name: "Team0NIC1.networkuri"
+          value: "/rest/ethernet-networks/c24d47fe-edc2-475d-9207-917293017be8"
+        -
+          name:  "Team0NIC2.networkuri"
+          value: "/rest/ethernet-networks/c24d47fe-edc2-475d-9207-917293017be8"
+        -
+          name: "Team0NIC2.connectionid"
+          value: "3"
+#      firmware:
+#        firmwareBaselineUri: "{{ fw_baseline_uri }}"
+#        firmwareInstallType: "FirmwareOnlyOfflineMode"
+#        forceInstallFirmware: false
+#        manageFirmware: true
+  register: output
+  delegate_to: localhost
+  until: output|changed
+  retries: 10
+  delay: 10
+  tags:
+  - templates
+- debug: 
+    var: output
+    verbosity: 2
+  tags:
+  - templates
+
+- name: set hardware name
+  set_fact:
+    hardware_name: "{{ item }}"
+  with_items:  "{{ hw|json_query(hardware_name_query) }}"
+  vars:
+    hardware_name_query:  "ansible_facts.server_hardwares[?uri=='{{ output.ansible_facts.server_hardware.uri}}'].name"

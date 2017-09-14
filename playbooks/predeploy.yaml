@@ -1,0 +1,10 @@
+---
+- name: run predeployment tasks
+  hosts: all
+  gather_facts: true
+  remote_user: root
+  roles:
+    - ../roles/passwords
+    - ../roles/predeploy
+  environment:
+    PYTHONPATH: "$PYTHONPATH:/usr/share/ansible"

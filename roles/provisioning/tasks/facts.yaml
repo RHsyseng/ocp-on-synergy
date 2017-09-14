@@ -1,0 +1,80 @@
+---
+#- name: get server profiles
+#  oneview_server_profile_facts:
+#  register: sp
+#  delegate_to: localhost
+#  run_once: True
+
+- name: get server hardwares
+  oneview_server_hardware_facts:
+  register: hw
+  delegate_to: localhost
+  run_once: True
+
+- debug: 
+    var: "{{ item }}"
+#    verbosity: 2
+  with_items:
+  - "{{ hw.ansible_facts.server_hardwares|to_json }}"
+
+#- debug: var=item
+#  with_items: "{{ hw|json_query('ansible_facts.server_hardwares[*].name') }}"
+
+#- debug: var=item
+#  with_items: "{{ hw|json_query('ansible_facts.server_hardwares[*].position') }}"
+
+#- debug: var=item
+#  with_items: "{{ hw|json_query(hardware_name_query) }}"
+#  vars:
+#    hardware_name_query: ansible_facts.server_hardwares[?position==" ~  {{ enclosure_bay }} ~ "].name
+#    #hardware_name_query: "ansible_facts.server_hardwares[?uri=='/rest/server-hardware/36343537-3338-4E43-3736-303230383044'].name"
+#    #hardware_name_query: "ansible_facts.server_hardwares[?name=='CN759000CK, bay 9'].status"
+
+#ansible_facts.server_hardwares[*].name') }}"
+
+
+
+- debug:
+    msg: "server {{ item.name }} in bay {{ item.position }} has state {{ item.state }} with {{ item.memoryMb }} memory. it is a {{ item.shortModel }}. {{ item.processorCoreCount }} cores are spread across {{ item.processorCount }} at {{ item.processorSpeedMhz }} ({{ item.processorType }})."
+  with_items:
+  - "{{ hw.ansible_facts.server_hardwares }}"
+  run_once: True
+
+- name: set profile template to OCP-Master
+  set_fact:
+    server_profile_template: OCP-Master-Large
+    deployment_plan: "{{ master_plan }}"
+  when:
+  - "'masters' in group_names"
+
+- name: set profile template to OCP-Worker-Node
+  set_fact:
+    server_profile_template: OCP-Worker-Node-Large
+    deployment_plan: "{{ worker_plan }}"
+  when:
+  - "'nodes' in group_names"
+
+- name: set profile template to OCP-Node-Cns
+  set_fact:
+    server_profile_template: OCP-Node-CNS-Large
+  when:
+  - "'cns' in group_names"
+
+- name: get profile facts
+  oneview_server_profile_facts:
+  register: profile_facts
+  delegate_to: localhost
+
+- debug:
+    var: profile_facts
+    verbosity: 2
+
+- name: get os deployment plan facts
+  oneview_os_deployment_plan_facts:
+    name: "{{ deployment_plan }}"
+  register: deployment_plan
+  delegate_to: localhost
+
+- name: set OS Deployment Plan URI
+  set_fact:
+    os_deployment_plan_uri:  "{{ deployment_plan.ansible_facts.os_deployment_plans.0.uri }}"

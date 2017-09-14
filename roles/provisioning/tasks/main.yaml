@@ -1,0 +1,17 @@
+---
+# set some vars
+- include: ./facts.yaml
+  tags:
+  - facts
+# get firmware version
+- include: ./firmware.yaml
+  tags:
+  - fw
+# create server profiles
+- include: ./profiles.yaml
+  tags:
+  - profiles
+# boot it up
+- include: ./poweron.yaml
+  tags:
+  - poweron

@@ -1,0 +1,5 @@
+---
+#master_plan: "Deploy OpenShift-Master"
+#worker_plan: "Deploy OpenShift Worker"
+master_plan: "Deploy OpenShift Master Lg 09-13-2017"
+worker_plan: "Deploy OpenShift Master Lg 09-13-2017"
