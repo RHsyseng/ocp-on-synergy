@@ -1,38 +1,15 @@
 ---
-#- name: get server profiles
-#  oneview_server_profile_facts:
-#  register: sp
-#  delegate_to: localhost
-#  run_once: True
+- name: get server profiles
+  oneview_server_profile_facts:
+  register: sp
+  delegate_to: localhost
+  run_once: True
 
 - name: get server hardwares
   oneview_server_hardware_facts:
   register: hw
   delegate_to: localhost
   run_once: True
-
-- debug: 
-    var: "{{ item }}"
-#    verbosity: 2
-  with_items:
-  - "{{ hw.ansible_facts.server_hardwares|to_json }}"
-
-#- debug: var=item
-#  with_items: "{{ hw|json_query('ansible_facts.server_hardwares[*].name') }}"
-
-#- debug: var=item
-#  with_items: "{{ hw|json_query('ansible_facts.server_hardwares[*].position') }}"
-
-#- debug: var=item
-#  with_items: "{{ hw|json_query(hardware_name_query) }}"
-#  vars:
-#    hardware_name_query: ansible_facts.server_hardwares[?position==" ~  {{ enclosure_bay }} ~ "].name
-#    #hardware_name_query: "ansible_facts.server_hardwares[?uri=='/rest/server-hardware/36343537-3338-4E43-3736-303230383044'].name"
-#    #hardware_name_query: "ansible_facts.server_hardwares[?name=='CN759000CK, bay 9'].status"
-
-#ansible_facts.server_hardwares[*].name') }}"
-
-
 
 - debug:
     msg: "server {{ item.name }} in bay {{ item.position }} has state {{ item.state }} with {{ item.memoryMb }} memory. it is a {{ item.shortModel }}. {{ item.processorCoreCount }} cores are spread across {{ item.processorCount }} at {{ item.processorSpeedMhz }} ({{ item.processorType }})."
@@ -78,3 +55,24 @@
 - name: set OS Deployment Plan URI
   set_fact:
     os_deployment_plan_uri:  "{{ deployment_plan.ansible_facts.os_deployment_plans.0.uri }}"
+
+- name: get network facts
+  oneview_ethernet_network_facts:
+  delegate_to: localhost
+  run_once: True
+  register: eth_facts
+
+- debug:
+    var: eth_facts
+    verbosity: 2
+
+- name: set network uri
+  set_fact:
+    network_uri: "{{ item }}"
+  with_items:  "{{ eth_facts|json_query(network_name_query) }}"
+  vars:
+    network_name_query:  "ansible_facts.ethernet_networks[?name=='{{ network_name }}'].uri"
+
+- debug:
+    var: network_uri
+    verbosity: 2

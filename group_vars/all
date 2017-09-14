@@ -34,4 +34,4 @@ oneview_auth:
   ip: "10.10.172.111"
   username: "Administrator"
   api_version: 300
-
+network_name: "vlan345"

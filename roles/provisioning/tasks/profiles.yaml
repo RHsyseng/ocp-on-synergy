@@ -71,13 +71,16 @@
           value: "am2.cloudra.local"
         - 
           name: "Team0NIC1.networkuri"
-          value: "/rest/ethernet-networks/c24d47fe-edc2-475d-9207-917293017be8"
+          value: "{{ network_uri }}"
         -
           name:  "Team0NIC2.networkuri"
-          value: "/rest/ethernet-networks/c24d47fe-edc2-475d-9207-917293017be8"
+          value: "{{ network_uri }}"
         -
           name: "Team0NIC2.connectionid"
           value: "3"
+        - 
+          name: "Team0NIC2.dhcp"
+          value: "false"
 #      firmware:
 #        firmwareBaselineUri: "{{ fw_baseline_uri }}"
 #        firmwareInstallType: "FirmwareOnlyOfflineMode"
@@ -85,9 +88,9 @@
 #        manageFirmware: true
   register: output
   delegate_to: localhost
-  until: output|changed
-  retries: 10
-  delay: 10
+#  until: output|changed
+#  retries: 10
+#  delay: 10
   tags:
   - templates
 - debug: 
