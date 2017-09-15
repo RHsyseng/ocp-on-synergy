@@ -1,5 +1,55 @@
 ---
-#master_plan: "Deploy OpenShift-Master"
-#worker_plan: "Deploy OpenShift Worker"
-master_plan: "Deploy OpenShift Master Lg 09-13-2017"
-worker_plan: "Deploy OpenShift Master Lg 09-13-2017"
+preassigned: False
+async_timeout: 0
+## os settings. should not have to edit
+os_custom_attributes:
+-
+  name: "ServerFQDN"
+  value: "{{ inventory_hostname }}"
+-
+  name: "Team0NIC1.ipaddress"
+  value: "{{ ansible_host }}"
+-
+  name: "Team0NIC1.ipv4disable"
+  value: "false"
+-
+  name: "Team0NIC1.constraint"
+  value: "userspecified"
+-
+  name: "Team0NIC1.connectionid"
+  value: "2"
+-
+  name: "Team0NIC1.gateway"
+  value: "{{ network.gateway }}"
+-
+  name: "Team0NIC1.netmask"
+  value: "{{ network.netmask }}"
+-
+  name: "Team0NIC1.dhcp"
+  value: "false"
+-
+  name: "Team0NIC1.dns1"
+  value: "{{ network.dns1 }}"
+-
+  name: "Team0NIC1.dns2"
+  value: "{{ network.dns2 }}"
+-
+  name: "Team0NIC1.domain"
+  value: "{{ network.domain }}"
+-
+  name: "Team0NIC1.networkuri"
+  value: "{{ network.uri }}"
+-
+  name:  "Team0NIC2.networkuri"
+  value: "{{ network.uri }}"
+-
+  name: "Team0NIC2.connectionid"
+  value: "3"
+-
+  name: "Team0NIC2.dhcp"
+  value: "false"
+-
+  name: "Team0NIC2.constraint"
+  value: "userspecified"
+
+

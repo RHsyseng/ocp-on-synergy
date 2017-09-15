@@ -7,10 +7,7 @@
       powerStateData:
         powerState: "On"
         powerControl: "MomentaryPress"
-  register: output
   delegate_to: localhost
-  tags:
-  - poweron
 - debug:
     var: output
     verbosity: 2

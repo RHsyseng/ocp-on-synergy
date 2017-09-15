@@ -11,68 +11,105 @@
   delegate_to: localhost
   run_once: True
 
+
+- debug:
+    var: sp
+    verbosity: 2
+  run_once: True
+
+- debug:
+    var: hw
+    verbosity: 2
+  run_once: True
+
 - debug:
     msg: "server {{ item.name }} in bay {{ item.position }} has state {{ item.state }} with {{ item.memoryMb }} memory. it is a {{ item.shortModel }}. {{ item.processorCoreCount }} cores are spread across {{ item.processorCount }} at {{ item.processorSpeedMhz }} ({{ item.processorType }})."
+    verbosity: 2
   with_items:
   - "{{ hw.ansible_facts.server_hardwares }}"
   run_once: True
-
-- name: set profile template to OCP-Master
-  set_fact:
-    server_profile_template: OCP-Master-Large
-    deployment_plan: "{{ master_plan }}"
-  when:
-  - "'masters' in group_names"
-
-- name: set profile template to OCP-Worker-Node
-  set_fact:
-    server_profile_template: OCP-Worker-Node-Large
-    deployment_plan: "{{ worker_plan }}"
-  when:
-  - "'nodes' in group_names"
-
-- name: set profile template to OCP-Node-Cns
-  set_fact:
-    server_profile_template: OCP-Node-CNS-Large
-  when:
-  - "'cns' in group_names"
-
-- name: get profile facts
-  oneview_server_profile_facts:
-  register: profile_facts
-  delegate_to: localhost
-
-- debug:
-    var: profile_facts
-    verbosity: 2
 
 - name: get os deployment plan facts
   oneview_os_deployment_plan_facts:
     name: "{{ deployment_plan }}"
   register: deployment_plan
   delegate_to: localhost
+  run_once: True
 
 - name: set OS Deployment Plan URI
   set_fact:
     os_deployment_plan_uri:  "{{ deployment_plan.ansible_facts.os_deployment_plans.0.uri }}"
+  run_once: True
 
 - name: get network facts
   oneview_ethernet_network_facts:
   delegate_to: localhost
   run_once: True
-  register: eth_facts
+  register: nw
 
 - debug:
-    var: eth_facts
+    var: nw
     verbosity: 2
+  run_once: True
 
 - name: set network uri
   set_fact:
-    network_uri: "{{ item }}"
-  with_items:  "{{ eth_facts|json_query(network_name_query) }}"
+    network: "{{ network|combine({'uri': item }) }}"
+  with_items:  "{{ nw|json_query(network_name_query) }}"
   vars:
-    network_name_query:  "ansible_facts.ethernet_networks[?name=='{{ network_name }}'].uri"
+    network_name_query:  "ansible_facts.ethernet_networks[?name=='{{ network.name }}'].uri"
+  run_once: True
 
 - debug:
-    var: network_uri
+    var: network
     verbosity: 2
+  run_once: True
+
+- name: set hardware facts
+  set_fact:
+    preassigned: True
+    hardware_name: "{{ enclosure_name }}, bay {{ enclosure_bay }}"
+  when:
+  - enclosure_name is defined
+  - enclosure_bay is defined
+
+- debug:
+    var: preassigned
+    verbosity: 2
+
+- debug:
+    var: hardware_name
+    verbosity: 2
+  when: preassigned
+
+- name: set hardware uri
+  set_fact:
+    hardware_uri: "{{ item }}"
+  with_items:  "{{ hw|json_query(hardware_name_query) }}"
+  vars:
+    hardware_name_query:  "ansible_facts.server_hardwares[?name=='{{  hardware_name }}'].uri"
+  when: preassigned
+
+- debug:
+    var: hardware_uri
+    verbosity: 2
+  when: preassigned
+
+
+- name: check for more randomness
+  debug:
+    var:  "{{ groups['all']|map('extract', hostvars, 'preassigned')|list|unique|length }}"
+  run_once: True
+  delegate_to: localhost
+
+- name: set async timeout
+  set_fact:
+    async_timeout: 5
+  when:
+  -  "groups['all']|map('extract', hostvars, 'preassigned')|list|unique|length > 1"
+  run_once: True
+  delegate_to: localhost
+
+#- fail:
+#  run_once: True
+

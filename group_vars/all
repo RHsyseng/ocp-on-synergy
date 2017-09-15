@@ -1,6 +1,4 @@
 ---
-## satellite vars
-ansible_domain: hpecloud.test
 bios_settings:
 - id: "CustomPostMessage"
   value: "!! automate the planet !!"
@@ -16,22 +14,16 @@ bios_settings:
   value: "StaticHighPerf"
 - id: "MinProcIdlePower"
   value: "NoCStates"
-storage_cfg:
-  controllers:
-    - deviceSlot: "Embedded"
-      importConfiguration: false
-      initialize: true
-      mode: "RAID"
-      logicalDrives:
-      - bootable: true
-        driveNumber: 1
-        driveTechnology: "SasHdd"
-        name: "os"
-        numPhysicalDrives: 2
-        raidLevel: "RAID1"
 ## oneview vars
 oneview_auth:
   ip: "10.10.172.111"
   username: "Administrator"
   api_version: 300
-network_name: "vlan345"
+## network settings
+network:
+  name: "vlan345"
+  gateway: "10.10.173.44"
+  netmask: "255.255.252.0"
+  domain: "am2.cloudra.local"
+  dns1: "10.10.173.45"
+  dns2: "10.10.173.1"
