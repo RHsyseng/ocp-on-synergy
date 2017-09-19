@@ -1,13 +1,4 @@
 ---
-- name: get IP of DNS server via the load balancer
-  set_fact:
-    dns_server: "{{ satellite_url.split('//').1 }}"
-  run_once: true
-  delegate_to: localhost
-
-- debug:
-    var: dns_server
-
 - name: set subdomain record
   set_fact:
     subdomain: "{{ openshift_master_default_subdomain.split('.').0 }}"
@@ -18,7 +9,7 @@
   nsupdate:
     state: absent
     key_name: "rndc-key"
-    key_secret: "r/42yYsCOcnIxvXul+xz3Q=="
+    key_secret: "{{ rndc_key }}"
     server: "{{ dns_server }}"
     zone: "{{ ansible_domain }}"
     record: "{{ openshift_master_cluster_public_hostname.split('.').0 }}"
@@ -30,7 +21,7 @@
   nsupdate:
     state: absent
     key_name: "rndc-key"
-    key_secret: "r/42yYsCOcnIxvXul+xz3Q=="
+    key_secret: "{{ rndc_key }}"
     server: "{{ dns_server }}"
     zone: "{{ ansible_domain }}"
     record: "*.{{ subdomain }}"

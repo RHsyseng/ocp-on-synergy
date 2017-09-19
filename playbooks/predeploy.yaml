@@ -7,4 +7,4 @@
     - ../roles/passwords
     - ../roles/predeploy
   environment:
-    PYTHONPATH: "$PYTHONPATH:/usr/share/ansible"
+    PYTHONPATH: "$PYTHONPATH:/usr/share/ansible/oneview-ansible/library"

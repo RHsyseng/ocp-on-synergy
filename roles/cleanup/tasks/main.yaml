@@ -2,8 +2,6 @@
 - include: ./facts.yaml
 - include: ./poweroff.yaml
 #- include: ./satellite.yaml
-#- include: ./dns.yaml
-#  tags:
-#    - dns
+- include: ./dns.yaml
 - include: ./profiles.yaml
 #- include: ./rmserver.yaml

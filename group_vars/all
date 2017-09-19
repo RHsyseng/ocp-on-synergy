@@ -27,3 +27,4 @@ network:
   domain: "am2.cloudra.local"
   dns1: "10.10.173.45"
   dns2: "10.10.173.1"
+dns_server: "{{ network.dns1 }}"

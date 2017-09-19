@@ -3,9 +3,9 @@
 - include: dns.yaml
   tags:
   - dns
-- include: packages.yaml
-  tags:
-  - packages
-- include: docker.yaml
-  tags:
-  - docker
+#- include: packages.yaml
+#  tags:
+#  - packages
+#- include: docker.yaml
+#  tags:
+#  - docker
