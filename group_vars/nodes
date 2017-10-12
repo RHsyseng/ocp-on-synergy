@@ -1,3 +1,0 @@
----
-deployment_plan: "Deploy OpenShift Master Lg 09-13-2017"
-server_profile_template: "OCP-Worker-Node-Large"

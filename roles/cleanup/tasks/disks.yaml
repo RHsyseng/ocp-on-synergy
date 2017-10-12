@@ -1,0 +1,32 @@
+---
+#- name: clean up disks
+#  command: dd if=/dev/zero of=/dev/sda bs=1M count=4096
+#  ignore_errors: True
+
+- name: clean up disks
+  command: sgdisk -Z /dev/sda
+  ignore_errors: True
+
+#- name: relabel disk
+#  command: parted -s /dev/sda mklabel gpt
+#  ignore_errors: True
+
+#- name: clean up disks (gluster)
+#  command: dd if=/dev/zero of=/dev/sdb bs=1M count=4096
+#  when:
+#  - "'glusterfs' in group_names"
+#  ignore_errors: True
+
+- name: wipe disks (gluster)
+  command: sgdisk -Z /dev/sdb
+  when:
+  - "'glusterfs' in group_names"
+  ignore_errors: True
+
+#- name: relabel disk
+#  command: parted -s /dev/sdb mklabel gpt
+#  when:
+#  - "'glusterfs' in group_names"
+#  ignore_errors: True
+
+

@@ -1,0 +1,30 @@
+---
+- name: install glusterfs-fuse
+  package:
+    name: glusterfs-fuse
+    state: latest
+#- name: install sg3_utils package
+#  package:
+#    name: sg3_utils
+#    state: latest
+#- name: nuke sdb on cns nodes for gluster
+#  command: sgdisk -Z /dev/sdb
+
+#- name: required gluster ports
+#  lineinfile:
+#    dest: /etc/sysconfig/iptables
+#    state: present
+#    insertbefore: 'COMMIT'
+#    line: "{{ item }}"
+#  with_items:
+#  - '-A INPUT -p tcp -m state --state NEW -m tcp --dport 24007 -j ACCEPT'
+#  - '-A INPUT -p tcp -m state --state NEW -m tcp --dport 24008 -j ACCEPT'
+#  - '-A INPUT -p tcp -m state --state NEW -m tcp --dport 2222 -j ACCEPT'
+#  - '-A INPUT -p tcp -m state --state NEW -m multiport --dports 49152:49664 -j ACCEPT'
+
+
+#- name: reload iptables
+#  systemd:
+#    name: iptables
+#    state: reloaded
+

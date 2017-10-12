@@ -11,7 +11,7 @@
     key_name: "rndc-key"
     key_secret: "{{ rndc_key }}"
     server: "{{ dns_server }}"
-    zone: "{{ ansible_domain }}"
+    zone: "{{ network.domain }}"
     record: "{{ openshift_master_cluster_public_hostname.split('.').0 }}"
     value: "{{ lb_ip }}"
   run_once: true
@@ -62,7 +62,7 @@
     key_name: "rndc-key"
     key_secret: "{{ rndc_key }}"
     server: "{{ dns_server }}"
-    zone: "{{ ansible_domain }}"
+    zone: "{{ network.domain }}"
     record: "*.{{ subdomain }}"
     value: "{{ router_ips }}"
   delegate_to: localhost

@@ -1,7 +1,7 @@
 ---
-- include: ./facts.yaml
-- include: ./poweroff.yaml
-#- include: ./satellite.yaml
-- include: ./dns.yaml
-- include: ./profiles.yaml
-#- include: ./rmserver.yaml
+- include: facts.yaml
+#- include: rhn.yaml
+#- include: disks.yaml
+- include: poweroff.yaml
+- include: dns.yaml
+- include: profiles.yaml

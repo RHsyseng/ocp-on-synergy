@@ -3,6 +3,9 @@
 - include: dns.yaml
   tags:
   - dns
+- include: glusterfs.yaml
+  when:
+  - "'glusterfs' in group_names"
 #- include: packages.yaml
 #  tags:
 #  - packages

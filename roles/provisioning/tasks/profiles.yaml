@@ -1,5 +1,25 @@
 ---
-- name: create a service profile and assign it to a node (preassigned)
+#- name: create a service profile and assign it to a node (preassigned)
+#  oneview_server_profile:
+#    state: present
+#    data:
+#      serverProfileTemplateName: "{{ server_profile_template }}"
+#      name: "{{ inventory_hostname.split('.').0 }}"
+#      affinity: "Bay"
+#      description: "{{ inventory_hostname.split('.').0 }} with {{ server_profile_template }}"
+#      serverHardwareUri: "{{ hardware_uri }}"
+#      osDeploymentSettings:
+#        osDeploymentPlanUri: "{{ os_deployment_plan_uri }}"
+#        osCustomAttributes: "{{ os_custom_attributes }}"
+#  register: server_profile_create
+#  delegate_to: localhost
+#  async: "{{ async_timeout }}"
+#  poll: 0
+#  when:
+#  - preassigned
+#  - async_timeout > 0
+
+- name: create a service profile and assign it to a node (all preassigned)
   oneview_server_profile:
     state: present
     data:
@@ -11,16 +31,12 @@
       osDeploymentSettings:
         osDeploymentPlanUri: "{{ os_deployment_plan_uri }}"
         osCustomAttributes: "{{ os_custom_attributes }}"
-#      firmware:
-#        firmwareBaselineUri: "{{ fw_baseline_uri }}"
-#        firmwareInstallType: "FirmwareOnlyOfflineMode"
-#        forceInstallFirmware: false
-#        manageFirmware: true
   register: server_profile_create
   delegate_to: localhost
-  when: preassigned
-  async: "{{ async_timeout }}"
-  poll: 0
+#  when:
+#  - preassigned
+#  - async_timeout == 0
+
 - name: create a service profile and assign it to a node (random)
   oneview_server_profile:
     state: present

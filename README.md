@@ -51,3 +51,4 @@ $ ansible-playbook -i hosts playbooks/provisioning.yaml --ask-vault-pass
 ~~~
 
 yum install python2-jmespath.noarch
+tower-manage inventory_import --source inventory/ --inventory-name=ocp-on-synergy --overwrite --overwrite-vars

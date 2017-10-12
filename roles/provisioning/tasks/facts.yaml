@@ -5,12 +5,13 @@
   delegate_to: localhost
   run_once: True
 
+#- fail:
+
 - name: get server hardwares
   oneview_server_hardware_facts:
   register: hw
   delegate_to: localhost
   run_once: True
-
 
 - debug:
     var: sp
@@ -29,17 +30,38 @@
   - "{{ hw.ansible_facts.server_hardwares }}"
   run_once: True
 
+- name: set CNS node facts
+  set_fact:
+    server_profile_template: "{{ glusterfs_server_profile_template }}"
+    deployment_plan: "{{ glusterfs_deployment_plan }}"
+  when:
+  - "'glusterfs' in group_names"
+
+- name: set master node facts
+  set_fact:
+    server_profile_template: "{{ master_server_profile_template }}"
+    deployment_plan: "{{ master_deployment_plan }}"
+  when:
+  - "'masters' in group_names"
+
+- debug:
+    var: deployment_plan
+- debug:
+    var: server_profile_template
+
+#- fail:
+
 - name: get os deployment plan facts
   oneview_os_deployment_plan_facts:
     name: "{{ deployment_plan }}"
   register: deployment_plan
   delegate_to: localhost
-  run_once: True
+#  run_once: True
 
 - name: set OS Deployment Plan URI
   set_fact:
     os_deployment_plan_uri:  "{{ deployment_plan.ansible_facts.os_deployment_plans.0.uri }}"
-  run_once: True
+#  run_once: True
 
 - name: get network facts
   oneview_ethernet_network_facts:
@@ -98,7 +120,7 @@
 
 - name: check for more randomness
   debug:
-    var:  "{{ groups['all']|map('extract', hostvars, 'preassigned')|list|unique|length }}"
+    var:  "{{ groups['nodes']|map('extract', hostvars, 'preassigned')|list|unique|length }}"
   run_once: True
   delegate_to: localhost
 
@@ -106,10 +128,13 @@
   set_fact:
     async_timeout: 5
   when:
-  -  "groups['all']|map('extract', hostvars, 'preassigned')|list|unique|length > 1"
+  -  "groups['nodes']|map('extract', hostvars, 'preassigned')|list|unique|length > 1"
   run_once: True
   delegate_to: localhost
 
+- debug:
+    var: server_profile_template
+    verbosity: 2
+
 #- fail:
 #  run_once: True
-
