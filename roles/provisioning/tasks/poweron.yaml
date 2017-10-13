@@ -16,3 +16,7 @@
   local_action: wait_for port=22 host='{{ ansible_host }}' delay=30 timeout=3600
   tags:
   - poweron
+
+- name: wait a bit for the build scripts to run
+  pause:
+    minutes: 5
