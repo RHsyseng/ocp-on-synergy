@@ -1,0 +1,14 @@
+---
+- name: login as oc admin
+  command: oc login -u system:admin
+
+- name: create cloudforms service account
+  command: oc create sa cfadmin -n openshift-infra
+  register: mksa
+  failed_when:
+  - "'AlreadyExists' not in mksa.stderr"
+  - mksa.rc != 0
+
+- name: grant cloudforms SA cluster-reader access
+  command: oadm policy add-cluster-role-to-user cluster-reader system:serviceaccount:openshift-infra:cfadmin
+
