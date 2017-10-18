@@ -19,7 +19,7 @@
 #  - preassigned
 #  - async_timeout > 0
 
-- name: create a service profile and assign it to a node (all preassigned)
+- name: create a service profile and assign it to a node (preassigned)
   oneview_server_profile:
     state: present
     data:
@@ -33,8 +33,8 @@
         osCustomAttributes: "{{ os_custom_attributes }}"
   register: server_profile_create
   delegate_to: localhost
-#  when:
-#  - preassigned
+  when:
+  - preassigned
 #  - async_timeout == 0
 
 - name: create a service profile and assign it to a node (random)

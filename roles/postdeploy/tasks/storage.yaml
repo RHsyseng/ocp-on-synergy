@@ -1,0 +1,10 @@
+---
+- name: login as oc admin
+  command: oc login -u system:admin
+
+- name: set patch
+  set_fact:
+    oc_patch: '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}}'
+
+- name: set glusterfs as default storage class
+  command: oc patch storageclass glusterfs-storage -p '{{ oc_patch }}'

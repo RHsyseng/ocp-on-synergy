@@ -1,0 +1,9 @@
+---
+- name: run predeployment tasks
+  hosts: nodes
+  gather_facts: false
+  remote_user: root
+  roles:
+    - ../roles/postdeploy
+  environment:
+    PYTHONPATH: "$PYTHONPATH:/usr/share/ansible/oneview-ansible/library"
