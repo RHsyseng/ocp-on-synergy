@@ -1,0 +1,30 @@
+---
+master_deployment_plan: "DeployOpenShiftMaster-10-02-2017"
+master_server_profile_template: "OCP-Master"
+worker_deployment_plan: "DeployOpenShiftWorker-10-02-2017"
+worker_server_profile_template: "OCP-Worker-Node"
+glusterfs_server_profile_template: "OCP-Node-CNS"
+glusterfs_deployment_plan: "DeployOpenShift-CNS-10-03-2017"
+deployment_plan: "{{ worker_deployment_plan }}"
+server_profile_template: "{{ worker_server_profile_template }}"
+## ocp
+openshift_master_default_subdomain: paas.cloud.example.com
+openshift_master_cluster_hostname: ocp-cluster.cloud.example.com
+openshift_master_cluster_public_hostname: ocp-cluster.cloud.example.com
+## oneview vars
+oneview_auth:
+  ip: "192.168.172.111"
+  username: "Administrator"
+  api_version: 300
+## network settings
+network:
+  name: "vlan345"
+  gateway: "192.168.173.44"
+  netmask: "255.255.252.0"
+  domain: "cloud.example.com"
+  dns1: "192.168.173.45"
+  dns2: "192.168.173.47"
+dns_server: "{{ network.dns1 }}"
+## satellite
+satellite_user: "admin"
+satellite_url: "https://192.168.173.45"

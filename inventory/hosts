@@ -1,0 +1,36 @@
+[OSEv3:children]
+nodes
+masters
+etcd
+lb
+glusterfs
+nfs
+
+[nodes]
+ocp-master1.cloud.example.com  openshift_schedulable=False ansible_host=192.168.173.52 enclosure_name=CN123000CK enclosure_bay=7
+ocp-master2.cloud.example.com  openshift_schedulable=False ansible_host=192.168.173.53 enclosure_name=CN123000CK enclosure_bay=9
+ocp-master3.cloud.example.com  openshift_schedulable=False ansible_host=192.168.173.54 enclosure_name=CN123000CK enclosure_bay=10
+ocp-node1.cloud.example.com  openshift_node_labels="{'region': 'infra'}" ansible_host=192.168.173.49
+ocp-node2.cloud.example.com  openshift_node_labels="{'region': 'infra'}" ansible_host=192.168.173.50
+ocp-node3.cloud.example.com  openshift_node_labels="{'region': 'infra'}" ansible_host=192.168.173.51
+
+[masters]
+ocp-master1.cloud.example.com
+ocp-master2.cloud.example.com
+ocp-master3.cloud.example.com
+
+
+[etcd]
+ocp-master1.cloud.example.com
+ocp-master2.cloud.example.com
+ocp-master3.cloud.example.com
+
+[lb]
+lb.cloud.example.com
+[nfs]
+lb.cloud.example.com
+
+[glusterfs]
+ocp-node1.cloud.example.com glusterfs_ip=192.168.173.49  glusterfs_devices='["/dev/sdb"]'
+ocp-node2.cloud.example.com glusterfs_ip=192.168.173.50  glusterfs_devices='["/dev/sdb"]'
+ocp-node3.cloud.example.com glusterfs_ip=192.168.173.51  glusterfs_devices='["/dev/sdb"]'
