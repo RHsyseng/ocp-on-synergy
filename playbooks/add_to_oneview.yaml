@@ -1,0 +1,29 @@
+---
+## bare metal provisioning
+
+- name: get passwords
+  hosts: tower
+  remote_user: root
+  gather_facts: false
+  roles:
+    - ../roles/passwords
+
+- name: add node to tower inventory
+  hosts: tower
+  remote_user: root
+  gather_facts: false
+  tasks:
+  - name: add node to inventory file
+    lineinfile:
+      dest: '{{ inventory_path }}/hosts'
+      state: present
+      insertafter: '[new_nodes]'
+      line: '{{ new_node }}.{{ network.domain }} ansible_host={{ new_ip }}'
+  - name: import new node to tower
+    command: tower-manage inventory_import --source '{{ inventory_path }}' --inventory-name=ocp-on-synergy --overwrite --overwrite-vars
+  environment:
+    PYTHONPATH: "$PYTHONPATH:/usr/share/ansible/oneview-ansible/library"
+    ONEVIEWSDK_IP: "{{ oneview_auth.ip }}"
+    ONEVIEWSDK_USERNAME: "{{ oneview_auth.username }}"
+    ONEVIEWSDK_PASSWORD: "{{ oneview_pw }}"
+    ONEVIEWSDK_API_VERSION: "{{ oneview_auth.api_version }}"

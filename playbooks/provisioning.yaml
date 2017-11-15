@@ -2,14 +2,14 @@
 ## bare metal provisioning
 
 - name: get passwords
-  hosts: nodes
+  hosts: all,!tower
   remote_user: root
   gather_facts: false
   roles:
     - ../roles/passwords
 
 - name: baremetal provisioning
-  hosts: nodes
+  hosts: all,!tower
   remote_user: root
   gather_facts: false
   roles:

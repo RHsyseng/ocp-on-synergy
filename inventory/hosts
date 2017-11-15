@@ -7,30 +7,40 @@ glusterfs
 nfs
 
 [nodes]
-ocp-master1.cloud.example.com  openshift_schedulable=False ansible_host=192.168.173.52 enclosure_name=CN123000CK enclosure_bay=7
-ocp-master2.cloud.example.com  openshift_schedulable=False ansible_host=192.168.173.53 enclosure_name=CN123000CK enclosure_bay=9
-ocp-master3.cloud.example.com  openshift_schedulable=False ansible_host=192.168.173.54 enclosure_name=CN123000CK enclosure_bay=10
-ocp-node1.cloud.example.com  openshift_node_labels="{'region': 'infra'}" ansible_host=192.168.173.49
-ocp-node2.cloud.example.com  openshift_node_labels="{'region': 'infra'}" ansible_host=192.168.173.50
-ocp-node3.cloud.example.com  openshift_node_labels="{'region': 'infra'}" ansible_host=192.168.173.51
+ocp-master1.cloudra.local  openshift_schedulable=False ansible_host=10.60.50.112 enclosure_name='FRM1-TOP: CN7515048P' enclosure_bay=1
+ocp-master2.cloudra.local  openshift_schedulable=False ansible_host=10.60.50.113 enclosure_name='FRM2-MID: CN759000BZ' enclosure_bay=1
+ocp-master3.cloudra.local  openshift_schedulable=False ansible_host=10.60.50.114 enclosure_name='FRM3-BTM: CN754600C1' enclosure_bay=1
+ocp-infra1.cloudra.local  openshift_node_labels="{'region': 'infra'}" ansible_host=10.60.50.115 enclosure_name='FRM1-TOP: CN7515048P' enclosure_bay=2
+ocp-infra2.cloudra.local  openshift_node_labels="{'region': 'infra'}" ansible_host=10.60.50.116 enclosure_name='FRM2-MID: CN759000BZ' enclosure_bay=2
+ocp-infra3.cloudra.local  openshift_node_labels="{'region': 'infra'}" ansible_host=10.60.50.117 enclosure_name='FRM3-BTM: CN754600C1' enclosure_bay=2
+ocp-cns1.cloudra.local  ansible_host=10.60.50.118 enclosure_name='FRM1-TOP: CN7515048P' enclosure_bay=7
+ocp-cns2.cloudra.local  ansible_host=10.60.50.119 enclosure_name='FRM2-MID: CN759000BZ' enclosure_bay=7
+ocp-cns3.cloudra.local  ansible_host=10.60.50.120 enclosure_name='FRM3-BTM: CN754600C1' enclosure_bay=7
+ocp-node1.cloudra.local  ansible_host=10.60.50.121 enclosure_name='FRM1-TOP: CN7515048P' enclosure_bay=12
+ocp-node2.cloudra.local  ansible_host=10.60.50.122 enclosure_name='FRM2-MID: CN759000BZ' enclosure_bay=12
+ocp-node3.cloudra.local  ansible_host=10.60.50.123 enclosure_name='FRM3-BTM: CN754600C1' enclosure_bay=12
 
 [masters]
-ocp-master1.cloud.example.com
-ocp-master2.cloud.example.com
-ocp-master3.cloud.example.com
+ocp-master1.cloudra.local
+ocp-master2.cloudra.local
+ocp-master3.cloudra.local
 
+[infra]
+ocp-infra1.cloudra.local
+ocp-infra2.cloudra.local
+ocp-infra3.cloudra.local
 
 [etcd]
-ocp-master1.cloud.example.com
-ocp-master2.cloud.example.com
-ocp-master3.cloud.example.com
+ocp-master1.cloudra.local
+ocp-master2.cloudra.local
+ocp-master3.cloudra.local
 
 [lb]
-lb.cloud.example.com
+ocp-lbnfs.cloudra.local ansible_host=10.60.50.111 enclosure_name='FRM3-BTM: CN754600C1' enclosure_bay=11
 [nfs]
-lb.cloud.example.com
+ocp-lbnfs.cloudra.local
 
 [glusterfs]
-ocp-node1.cloud.example.com glusterfs_ip=192.168.173.49  glusterfs_devices='["/dev/sdb"]'
-ocp-node2.cloud.example.com glusterfs_ip=192.168.173.50  glusterfs_devices='["/dev/sdb"]'
-ocp-node3.cloud.example.com glusterfs_ip=192.168.173.51  glusterfs_devices='["/dev/sdb"]'
+ocp-cns1.cloudra.local glusterfs_ip=10.60.50.118  glusterfs_devices='["/dev/sdb"]'
+ocp-cns2.cloudra.local glusterfs_ip=10.60.50.119  glusterfs_devices='["/dev/sdb"]'
+ocp-cns3.cloudra.local glusterfs_ip=10.60.50.120  glusterfs_devices='["/dev/sdb"]'

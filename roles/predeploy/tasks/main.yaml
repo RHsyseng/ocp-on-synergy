@@ -6,6 +6,8 @@
 - include: glusterfs.yaml
   when:
   - "'glusterfs' in group_names"
+  tags:
+  - glusterfs
 #- include: packages.yaml
 #  tags:
 #  - packages

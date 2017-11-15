@@ -1,5 +1,5 @@
 ---
-- name: run predeployment tasks
+- name: run postdeployment tasks
   hosts: nodes
   gather_facts: false
   remote_user: root

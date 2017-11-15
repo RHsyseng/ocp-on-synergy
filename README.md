@@ -13,11 +13,11 @@ In brief:
 Prepare environment:
 
 ~~~
-yum install python2-jmespath.noarch
+yum install python2-jmespath python-pip httpd-tools java-1.8.0-openjdk-headless ansible-tower-cli
 git clone https://github.com/HewlettPackard/oneview-ansible.git /tmp/oneview-ansible
 mkdir -p /usr/share/ansible/oneview-ansible
 rsync -avh --progress /tmp/oneview-ansible/library /usr/share/ansible/oneview-ansible
-pip install hpOneView
+pip install hpOneView dnspython
 ~~~
 
 Modify _inventory/group_vars/*_ to suit the target environment. Create an inventory file with the desired hostnames and designated IPs to use for the newly created nodes:
@@ -65,6 +65,7 @@ These playbooks use ansible-vault to encrypt sensitive login credentials. Modify
 
 ~~~
 $ ansible-vault encrypt passwords.yml --output=roles/passwords/vars/passwords.yml
+$ chmod 644 roles/passwords/vars/passwords.yml
 ~~~
 
 # Run it
@@ -79,3 +80,6 @@ These playbooks can also be used by Ansible Tower:
 ~~~
 $ tower-manage inventory_import --source inventory/ --inventory-name=ocp-on-synergy --overwrite --overwrite-vars
 ~~~
+pip install dnspython
+
+tower-manage inventory_import --source /etc/ansible/hpe/ --inventory-name=ocp-on-synergy --overwrite --overwrite-vars

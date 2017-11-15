@@ -1,6 +1,6 @@
 ---
 - name: run predeployment tasks
-  hosts: all
+  hosts: all,!tower
   gather_facts: true
   remote_user: root
   roles:

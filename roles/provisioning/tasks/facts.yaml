@@ -32,8 +32,8 @@
 
 - name: set CNS node facts
   set_fact:
-    server_profile_template: "{{ glusterfs_server_profile_template }}"
-    deployment_plan: "{{ glusterfs_deployment_plan }}"
+    server_profile_template: "{{ cns_server_profile_template }}"
+    deployment_plan: "{{ cns_deployment_plan }}"
   when:
   - "'glusterfs' in group_names"
 
@@ -43,6 +43,21 @@
     deployment_plan: "{{ master_deployment_plan }}"
   when:
   - "'masters' in group_names"
+
+- name: set lbnfs node facts
+  set_fact:
+    server_profile_template: "{{ lbnfs_server_profile_template }}"
+    deployment_plan: "{{ lbnfs_deployment_plan }}"
+  when:
+  - "'lb' in group_names"
+  - "'nfs' in group_names"
+
+- name: set infra node facts
+  set_fact:
+    server_profile_template: "{{ infra_server_profile_template }}"
+    deployment_plan: "{{ infra_deployment_plan }}"
+  when:
+  - "'infra' in group_names"
 
 - debug:
     var: deployment_plan

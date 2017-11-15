@@ -17,7 +17,7 @@ os_custom_attributes:
   value: "userspecified"
 -
   name: "Team0NIC1.connectionid"
-  value: "2"
+  value: "3"
 -
   name: "Team0NIC1.gateway"
   value: "{{ network.gateway }}"
@@ -44,7 +44,7 @@ os_custom_attributes:
   value: "{{ network.uri }}"
 -
   name: "Team0NIC2.connectionid"
-  value: "3"
+  value: "4"
 -
   name: "Team0NIC2.dhcp"
   value: "false"

@@ -10,21 +10,23 @@
 #- name: nuke sdb on cns nodes for gluster
 #  command: sgdisk -Z /dev/sdb
 
-#- name: required gluster ports
-#  lineinfile:
-#    dest: /etc/sysconfig/iptables
-#    state: present
-#    insertbefore: 'COMMIT'
-#    line: "{{ item }}"
-#  with_items:
-#  - '-A INPUT -p tcp -m state --state NEW -m tcp --dport 24007 -j ACCEPT'
-#  - '-A INPUT -p tcp -m state --state NEW -m tcp --dport 24008 -j ACCEPT'
-#  - '-A INPUT -p tcp -m state --state NEW -m tcp --dport 2222 -j ACCEPT'
-#  - '-A INPUT -p tcp -m state --state NEW -m multiport --dports 49152:49664 -j ACCEPT'
+- name: required gluster ports
+  lineinfile:
+    dest: /etc/sysconfig/iptables
+    state: present
+#    insertafter: ':OUTPUT ACCEPT [0:0]'
+    insertbefore: '-A INPUT -j REJECT --reject-with icmp-host-prohibited'
+    line: "{{ item }}"
+  with_items:
+  - '-A INPUT -p tcp -m state --state NEW -m tcp --dport 24007 -j ACCEPT'
+  - '-A INPUT -p tcp -m state --state NEW -m tcp --dport 24008 -j ACCEPT'
+  - '-A INPUT -p tcp -m state --state NEW -m tcp --dport 2222 -j ACCEPT'
+  - '-A INPUT -p tcp -m state --state NEW -m tcp --dport 10250 -j ACCEPT'
+  - '-A INPUT -p tcp -m state --state NEW -m multiport --dports 49152:49664 -j ACCEPT'
 
 
-#- name: reload iptables
-#  systemd:
-#    name: iptables
-#    state: reloaded
+- name: reload iptables
+  systemd:
+    name: iptables
+    state: reloaded
 

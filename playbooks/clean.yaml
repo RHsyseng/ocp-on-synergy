@@ -2,14 +2,14 @@
 ## clean up!
 
 - name: get passwords
-  hosts: OSEv3
+  hosts: all,!tower
   remote_user: root
   gather_facts: false
   roles:
     - ../roles/passwords
 
 - name: delete nodes from satellite and oneview
-  hosts: OSEv3
+  hosts: all,!tower
   remote_user: root
   gather_facts: false
   roles:
