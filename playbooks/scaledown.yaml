@@ -1,0 +1,59 @@
+---
+- name: remove node from ocp
+  hosts: masters
+  remote_user: root
+  gather_facts: false
+  tasks:
+  - name: mark node as unschedable
+    command: oadm manage-node '{{ target_node }}.{{ network.domain }}' --schedulable=false
+    when:
+    - "inventory_hostname == groups['masters'][0]"
+  - name: migrate pods from node
+    command: oadm manage-node '{{ target_node }}.{{ network.domain }}' --evacuate --force
+    when:
+    - "inventory_hostname == groups['masters'][0]"
+  - name: remove node from ocp
+    command: oc delete node '{{ target_node }}.{{ network.domain }}'
+    when:
+    - "inventory_hostname == groups['masters'][0]"
+  - name: clean up old certs
+    file:
+      path: '/etc/origin/generated-configs/node-{{ target_node }}.{{ network.domain }}.tgz'
+      state: absent
+  - name: clean up old cert dir
+    file:
+      path: '/etc/origin/generated-configs/node-{{ target_node }}.{{ network.domain }}'
+      state: absent
+
+- name: get passwords
+  hosts: tower
+  remote_user: root
+  gather_facts: false
+  roles:
+    - ../roles/passwords
+
+- name: delete node from satellite and oneview
+  hosts: tower
+  remote_user: root
+  gather_facts: false
+  roles:
+    - ../roles/rmnode
+  environment:
+    PYTHONPATH: "$PYTHONPATH:/usr/share/ansible/oneview-ansible/library"
+    ONEVIEWSDK_IP: "{{ oneview_auth.ip }}"
+    ONEVIEWSDK_USERNAME: "{{ oneview_auth.username }}"
+    ONEVIEWSDK_PASSWORD: "{{ oneview_pw }}"
+    ONEVIEWSDK_API_VERSION: "{{ oneview_auth.api_version }}"
+
+- name: remove node from inventory
+  hosts: tower
+  remote_user: root
+  gather_facts: false
+  tasks:
+  - name: remove node from inventory file
+    lineinfile:
+      dest: '{{ inventory_path }}/hosts'
+      state: absent
+      regexp: '^{{ target_node }}.{{ network.domain }}.*'
+  - name: import new node to tower
+    command: tower-manage inventory_import --source '{{ inventory_path }}' --inventory-name=ocp-on-synergy --overwrite --overwrite-vars

@@ -1,0 +1,42 @@
+---
+- name: get server hardwares
+  oneview_server_hardware_facts:
+  register: hw
+  delegate_to: localhost
+  run_once: True
+
+- name: check if server is in oneview
+  oneview_server_profile_facts:
+    name: "{{ target_node.split('.').0 }}"
+  delegate_to: localhost
+  run_once: True
+  register: profile_facts
+
+- debug:
+    var: profile_facts
+
+- name: set hardare uri
+  set_fact:
+    hardware_uri: "{{ profile_facts.ansible_facts.server_profiles.0.serverHardwareUri }}"
+  when:
+  - profile_facts.ansible_facts.server_profiles|length == 1
+  delegate_to: localhost
+  run_once: True
+
+- debug:
+    var: hardware_uri
+
+- name: set hardware name
+  set_fact:
+    hardware_name: "{{ item }}"
+  with_items:  "{{ hw|json_query(hardware_name_query) }}"
+  vars:
+    hardware_name_query:  "ansible_facts.server_hardwares[?uri=='{{ profile_facts.ansible_facts.server_profiles.0.serverHardwareUri}}'].name"
+  when:
+  - profile_facts.ansible_facts.server_profiles|length == 1
+  delegate_to: localhost
+  run_once: True
+
+- debug:
+    var: hardware_name
+

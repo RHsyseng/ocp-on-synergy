@@ -1,0 +1,22 @@
+---
+## clean up!
+
+- name: get passwords
+  hosts: masters
+  remote_user: root
+  gather_facts: false
+  roles:
+    - ../roles/passwords
+
+- name: delete node from satellite and oneview
+  hosts: masters
+  remote_user: root
+  gather_facts: false
+  roles:
+    - ../roles/rmnode
+  environment:
+    PYTHONPATH: "$PYTHONPATH:/usr/share/ansible/oneview-ansible/library"
+    ONEVIEWSDK_IP: "{{ oneview_auth.ip }}"
+    ONEVIEWSDK_USERNAME: "{{ oneview_auth.username }}"
+    ONEVIEWSDK_PASSWORD: "{{ oneview_pw }}"
+    ONEVIEWSDK_API_VERSION: "{{ oneview_auth.api_version }}"

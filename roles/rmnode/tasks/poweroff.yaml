@@ -1,0 +1,17 @@
+---
+- name: power off server
+  oneview_server_hardware:
+    state: power_state_set
+    data:
+      name: "{{ hardware_name }}"
+      powerStateData:
+        powerState: "Off"
+        powerControl: "PressAndHold"
+  register: output
+  delegate_to: localhost
+  run_once: True
+  when:
+  - profile_facts.ansible_facts.server_profiles|length == 1
+- debug: 
+    var: output
+    verbosity: 2

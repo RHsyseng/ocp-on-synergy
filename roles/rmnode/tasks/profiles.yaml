@@ -1,0 +1,14 @@
+---
+- name: unassign server profile
+  oneview_server_profile:
+    state: absent
+    data:
+      name: "{{ target_node.split('.').0 }}"
+  register: output
+  delegate_to: localhost
+  run_once: True
+  when:
+  - profile_facts.ansible_facts.server_profiles|length == 1
+- debug:
+    var: output
+    verbosity: 2

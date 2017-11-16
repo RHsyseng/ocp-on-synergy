@@ -13,12 +13,11 @@
   remote_user: root
   gather_facts: false
   tasks:
-  - name: add node to inventory file
+  - name: remove node to inventory file
     lineinfile:
       dest: '{{ inventory_path }}/hosts'
       state: absent
-      insertafter: '[new_nodes]'
-      line: '{{ new_node }}.{{ network.domain }} ansible_host={{ new_ip }}'
+      regexp: '^{{ target_node }}.{{ network.domain }}.*'
   - name: import new node to tower
     command: tower-manage inventory_import --source '{{ inventory_path }}' --inventory-name=ocp-on-synergy --overwrite --overwrite-vars
   environment:

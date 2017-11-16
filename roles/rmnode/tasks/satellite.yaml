@@ -1,0 +1,53 @@
+---    
+- name: "Get Host ID from Satellite"
+  uri:
+    url: "{{ satellite_url }}/api/hosts/?search=name={{ target_node }}.{{ network.domain }}"
+    user: "{{ satellite_user }}"
+    password: "{{ satellite_pw }}"
+    headers:
+      Content-Type: "application/json"
+      Accept: "application/json"
+    force_basic_auth: yes
+    validate_certs: False
+    return_content: yes
+    status_code: 200
+    timeout: 120
+  ignore_errors: false
+  register: check_host_response
+  delegate_to: localhost
+  run_once: True
+
+
+- name: set host ID
+  set_fact:
+    host_id: "{{ check_host_response.json.results.0.id }}"
+  when:
+  - check_host_response.json.subtotal == 1
+  delegate_to: localhost
+  run_once: True
+
+
+- debug:
+    var: host_id
+    verbosity: 2
+
+- name: "delete host from satellite"
+  uri:
+    url: "{{ satellite_url }}/api/hosts/{{ host_id }}"
+    user: "{{ satellite_user }}"
+    password: "{{ satellite_pw }}"
+    method: DELETE
+    headers:
+      Content-Type: "application/json"
+      Accept: "application/json"
+    force_basic_auth: yes
+    validate_certs: False
+    return_content: yes
+    status_code: 200
+    timeout: 120
+  ignore_errors: false
+  register: rm_host_response
+  delegate_to: localhost
+  run_once: True
+  when:
+  - check_host_response.json.subtotal == 1
