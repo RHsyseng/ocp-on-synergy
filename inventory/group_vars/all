@@ -12,26 +12,24 @@ infra_server_profile_template: "OCP-Infra"
 deployment_plan: "{{ worker_deployment_plan }}"
 server_profile_template: "{{ worker_server_profile_template }}"
 ## ocp
-openshift_master_default_subdomain: paas.cloudra.local
-openshift_master_cluster_hostname: ocp-cluster.cloudra.local
-openshift_master_cluster_public_hostname: ocp-cluster.cloudra.local
+openshift_master_default_subdomain: paas.example.com
+openshift_master_cluster_hostname: ocp-cluster.example.com
+openshift_master_cluster_public_hostname: ocp-cluster.example.com
 ## oneview vars
 oneview_auth:
-  ip: "10.60.50.10"
+  ip: "192.168.1.10"
   username: "Administrator"
   api_version: 300
 ## network settings
 network:
   name: "MGMT1"
-  gateway: "10.60.0.1"
-  netmask: "255.255.0.0"
-  domain: "cloudra.local"
-  dns1: "10.60.50.106"
-  dns2: "10.60.50.104"
+  gateway: "192.168.1.1"
+  netmask: "255.255.255.0"
+  domain: "example.com"
+  dns1: "192.168.1.106"
+  dns2: "192.168.1.104"
 dns_server: "{{ network.dns1 }}"
 ## satellite
 satellite_user: "admin"
-satellite_url: "https://10.60.50.106"
-## tower
-tower_user: "admin"
-tower_url: "10.60.50.104"
+satellite_url: "https://192.168.1.106"
+inventory_path: "/etc/ansible/ocp-on-synergy"

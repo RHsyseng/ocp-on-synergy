@@ -52,7 +52,7 @@
 
 - name: create router IP list
   set_fact:
-    router_ips: "{{ groups['all']|map('extract', hostvars, 'router_ip')|list|unique|difference(['0.0.0.0']) }}"
+    router_ips: "{{ groups['nodes']|map('extract', hostvars, 'router_ip')|list|unique|difference(['0.0.0.0']) }}"
   delegate_to: localhost
   run_once: true
 

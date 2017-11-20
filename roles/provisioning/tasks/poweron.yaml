@@ -17,6 +17,8 @@
   tags:
   - poweron
 
-- name: wait a bit for the build scripts to run
-  pause:
-    minutes: 5
+#- name: wait a bit for the build scripts to run
+#  pause:
+#    minutes: 5
+- name: ping
+  ping:

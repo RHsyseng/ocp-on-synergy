@@ -19,11 +19,15 @@
       state: present
       insertafter: '[new_nodes]'
       line: '{{ new_node }}.{{ network.domain }} ansible_host={{ new_ip }}'
+    register: add_node
   - name: import new node to tower
     command: tower-manage inventory_import --source '{{ inventory_path }}' --inventory-name=ocp-on-synergy --overwrite --overwrite-vars
-  environment:
-    PYTHONPATH: "$PYTHONPATH:/usr/share/ansible/oneview-ansible/library"
-    ONEVIEWSDK_IP: "{{ oneview_auth.ip }}"
-    ONEVIEWSDK_USERNAME: "{{ oneview_auth.username }}"
-    ONEVIEWSDK_PASSWORD: "{{ oneview_pw }}"
-    ONEVIEWSDK_API_VERSION: "{{ oneview_auth.api_version }}"
+    when:
+    - add_node|changed
+#  roles:
+#    - ../roles/addnode
+#  environment:
+#    ONEVIEWSDK_IP: "{{ oneview_auth.ip }}"
+#    ONEVIEWSDK_USERNAME: "{{ oneview_auth.username }}"
+#    ONEVIEWSDK_PASSWORD: "{{ oneview_pw }}"
+#    ONEVIEWSDK_API_VERSION: "{{ oneview_auth.api_version }}"

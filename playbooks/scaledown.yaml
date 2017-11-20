@@ -4,18 +4,22 @@
   remote_user: root
   gather_facts: false
   tasks:
+  #ignoring errors in case node was never added to cluster
   - name: mark node as unschedable
     command: oadm manage-node '{{ target_node }}.{{ network.domain }}' --schedulable=false
     when:
     - "inventory_hostname == groups['masters'][0]"
+    ignore_errors: True
   - name: migrate pods from node
     command: oadm manage-node '{{ target_node }}.{{ network.domain }}' --evacuate --force
     when:
     - "inventory_hostname == groups['masters'][0]"
+    ignore_errors: True
   - name: remove node from ocp
     command: oc delete node '{{ target_node }}.{{ network.domain }}'
     when:
     - "inventory_hostname == groups['masters'][0]"
+    ignore_errors: True
   - name: clean up old certs
     file:
       path: '/etc/origin/generated-configs/node-{{ target_node }}.{{ network.domain }}.tgz'
@@ -55,5 +59,5 @@
       dest: '{{ inventory_path }}/hosts'
       state: absent
       regexp: '^{{ target_node }}.{{ network.domain }}.*'
-  - name: import new node to tower
+  - name: inform tower about updated inventory file 
     command: tower-manage inventory_import --source '{{ inventory_path }}' --inventory-name=ocp-on-synergy --overwrite --overwrite-vars

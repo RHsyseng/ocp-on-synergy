@@ -1,9 +1,9 @@
 ---
-openshift_master_default_subdomain: paas.cloud.example.com
+openshift_master_default_subdomain: paas.example.com
 ansible_ssh_user: root
 openshift_master_cluster_method: native
-openshift_master_cluster_hostname: ocp-cluster.cloud.example.com
-openshift_master_cluster_public_hostname: ocp-cluster.cloud.example.com
+openshift_master_cluster_hostname: ocp-cluster.example.com
+openshift_master_cluster_public_hostname: ocp-cluster.example.com
 openshift_deployment_type: openshift-enterprise
 openshift_master_identity_providers: [{'name': 'htpasswd_auth','login': 'true', 'challenge': 'true','kind': 'HTPasswdPasswordIdentityProvider','filename': '/etc/origin/master/htpasswd'}]
 openshift_master_htpasswd_users: {'davidc': '$apr1$znPqASZl$WjOV1pFe4diJJPhjZgW2q1', 'kbell': '$apr1$.WBeJqbh$aic2L/5dxbnkdoEC0UWiT.', 'carolyn':  '$apr1$.WBeJqbh$aic2L/5dxbnkdoEC0UWiT.'}

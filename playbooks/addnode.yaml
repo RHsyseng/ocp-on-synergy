@@ -1,0 +1,20 @@
+---
+- name: get passwords
+  hosts: tower
+  remote_user: root
+  gather_facts: false
+  roles:
+    - ../roles/passwords
+
+- name: add node to satellite and oneview
+  hosts: tower
+  remote_user: root
+  gather_facts: false
+  roles:
+    - ../roles/addnode
+  environment:
+    PYTHONPATH: "$PYTHONPATH:/usr/share/ansible/oneview-ansible/library"
+    ONEVIEWSDK_IP: "{{ oneview_auth.ip }}"
+    ONEVIEWSDK_USERNAME: "{{ oneview_auth.username }}"
+    ONEVIEWSDK_PASSWORD: "{{ oneview_pw }}"
+    ONEVIEWSDK_API_VERSION: "{{ oneview_auth.api_version }}"
