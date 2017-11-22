@@ -11,7 +11,6 @@ nfs
 new_nodes
 
 [nodes]
-ocp-node4.example.com ansible_host=192.168.1.124
 ocp-master1.example.com  openshift_schedulable=False ansible_host=192.168.1.112 enclosure_name='FRM1-TOP: CN1234567A' enclosure_bay=1
 ocp-master2.example.com  openshift_schedulable=False ansible_host=192.168.1.113 enclosure_name='FRM2-MID: CN1234567B' enclosure_bay=1
 ocp-master3.example.com  openshift_schedulable=False ansible_host=192.168.1.114 enclosure_name='FRM3-BTM: CN1234567C' enclosure_bay=1
