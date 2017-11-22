@@ -132,21 +132,6 @@
     verbosity: 2
   when: preassigned
 
-
-- name: check for more randomness
-  debug:
-    var:  "{{ groups['nodes']|map('extract', hostvars, 'preassigned')|list|unique|length }}"
-  run_once: True
-  delegate_to: localhost
-
-- name: set async timeout
-  set_fact:
-    async_timeout: 5
-  when:
-  -  "groups['nodes']|map('extract', hostvars, 'preassigned')|list|unique|length > 1"
-  run_once: True
-  delegate_to: localhost
-
 - debug:
     var: server_profile_template
     verbosity: 2

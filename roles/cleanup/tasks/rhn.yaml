@@ -1,4 +1,0 @@
----
-- name: unsub from satellite
-  command: subscription-manager unregister
-  ignore_errors: True

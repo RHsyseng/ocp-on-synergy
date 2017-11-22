@@ -51,4 +51,3 @@ ocp-cns2.example.com glusterfs_ip=192.168.1.119  glusterfs_devices='["/dev/sdb"]
 ocp-cns3.example.com glusterfs_ip=192.168.1.120  glusterfs_devices='["/dev/sdb"]'
 
 [new_nodes]
-ocp-node5.example.com ansible_host=192.168.1.125
