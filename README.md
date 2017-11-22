@@ -200,7 +200,7 @@ They can now be combined in to a workflow. Under the Templates screen, click `+A
 This repo coupled with the openshift-ansible playbooks can also be used to scale up or down a cluster. Some additional job and workflow templates are required. Note that for the `ocp-provisioning-limited` playbook, a limit is applied so the job only runs against the new server.
 
 | Name        | Description  | Inventory  | Project | Playbook | Credential | Forks | Limit |
-| ------------- |:-------------:| -----:| -----:| -----:| -----:| -----:|
+| ------------- |:-------------:| -----:| -----:| -----:| -----:| -----:| -----:|
 | ocp-add_to_oneview      | add new node to inventory and oneview | ocp-on-synergy | ocp-on-synergy | playbooks/add_to_oneview.yaml | MACHINE: root-ssh, VAULT: ocp-vault | 20 | /blank/ |
 | ocp-provisioning-limited      | deploy bare-metal node via HPE OneView | ocp-on-synergy | ocp-on-synergy | playbooks/provisioning.yaml | MACHINE: root-ssh, VAULT: ocp-vault | 10 | new_nodes |
 | ocp-openshift-scaleup      | deploy openshift on synergy node | ocp-on-synergy | openshift-ansible | playbooks/byo/openshift-node/scaleup.yml | MACHINE: root-ssh | 20 | /blank/ |
