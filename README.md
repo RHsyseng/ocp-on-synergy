@@ -10,7 +10,11 @@ The setup assumes using an Ansible Tower server however they could also refer to
 
 The playbooks in this repo are to support a [Red Hat Reference Architcture](https://access.redhat.com/documentation/en/reference-architectures) in which the full explanation of usage of these playbooks is provided.
 
-It assumes that an Ansible Tower and Red Hat Satellite server has already been deployed in the environment, and use an existing HPE OneView/Synergy environment to provision servers.
+The Red Hat reference architecture is still a work in progress, but the HPE branded version can be found [on HPE's website](https://h20195.www2.hpe.com/V2/GetDocument.aspx?docname=a00038916enw).
+
+These playbooks assume that an Ansible Tower and Red Hat Satellite server has already been deployed in the environment, and use an existing HPE OneView/Synergy environment to provision servers. There are a number of artifacts (golden images, build plans, scripts, etc) that will need to be added to your Synergy environment. Those artifacts are available [here](https://github.com/HewlettPackard/image-streamer-reference-architectures/tree/master/RC-RHEL-OpenShift).
+
+Refer to the reference architecture and artifact repo on how to set those up.
 
 ## Installation
 
